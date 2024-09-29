@@ -12,25 +12,25 @@ const router = express.Router();
 router.post(
   '/register',
   validateRequest(AuthValidation.registerValidationSchema),
-  AuthControllers.registerUser
+  AuthControllers.registerUser,
 );
 router.post(
   '/login',
   validateRequest(AuthValidation.loginValidationSchema),
-  AuthControllers.loginUser
+  AuthControllers.loginUser,
 );
 
 router.post(
   '/change-password',
   auth(USER_ROLE.USER, USER_ROLE.ADMIN),
   validateRequest(AuthValidation.changePasswordValidationSchema),
-  AuthControllers.changePassword
+  AuthControllers.changePassword,
 );
 
 router.post(
   '/refresh-token',
   validateRequestCookies(AuthValidation.refreshTokenValidationSchema),
-  AuthControllers.refreshToken
+  AuthControllers.refreshToken,
 );
 
 export const AuthRoutes = router;
