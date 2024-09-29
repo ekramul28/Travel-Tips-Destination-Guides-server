@@ -36,7 +36,7 @@ const createEmailContent = async (data: object, templateType: string) => {
   try {
     const templatePath = path.join(
       process.cwd(),
-      `src/views/${templateType}.template.hbs`
+      `src/views/${templateType}.template.hbs`,
     );
     const content = await ReadFile(templatePath, 'utf8');
 
@@ -46,7 +46,7 @@ const createEmailContent = async (data: object, templateType: string) => {
   } catch (error) {
     throw new AppError(
       httpStatus.INTERNAL_SERVER_ERROR,
-      (error as Error).message
+      (error as Error).message,
     );
   }
 };

@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-unused-vars */
-import { ErrorRequestHandler } from 'express';
 import { ZodError } from 'zod';
 import config from '../config';
 import AppError from '../errors/AppError';
@@ -11,9 +9,11 @@ import handleDuplicateError from '../errors/handlerDuplicateError';
 import { TErrorSources } from '../interfaces/error.interface';
 import { TImageFiles } from '../interfaces/image.interface';
 import { deleteImageFromCloudinary } from '../utils/deleteImage';
+import { ErrorRequestHandler } from 'express';
 
+// eslint-disable-next-line no-unused-vars
 const globalErrorHandler: ErrorRequestHandler = async (err, req, res, next) => {
-  //setting default values
+  // Setting default values
   let statusCode = 500;
   let message = 'Something went wrong!';
   let errorSources: TErrorSources = [
@@ -23,10 +23,12 @@ const globalErrorHandler: ErrorRequestHandler = async (err, req, res, next) => {
     },
   ];
 
+  // Handle file deletion if files are present
   if (req.files && Object.keys(req.files).length > 0) {
     await deleteImageFromCloudinary(req.files as TImageFiles);
   }
 
+  // Handle different error types
   if (err instanceof ZodError) {
     const simplifiedError = handleZodError(err);
     statusCode = simplifiedError?.statusCode;
@@ -66,13 +68,14 @@ const globalErrorHandler: ErrorRequestHandler = async (err, req, res, next) => {
     ];
   }
 
-  //ultimate return
-  return res.status(statusCode).json({
+  // Send the response without returning it
+  res.status(statusCode).json({
     success: false,
     message,
     errorSources,
-    err,
-    stack: config.NODE_ENV === 'development' ? err?.stack : null,
+    // Optionally include the raw error and stack trace in development
+    err: config.NODE_ENV === 'development' ? err : undefined,
+    stack: config.NODE_ENV === 'development' ? err?.stack : undefined,
   });
 };
 
