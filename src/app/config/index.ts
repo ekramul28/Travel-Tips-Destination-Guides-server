@@ -22,6 +22,8 @@ export default {
   amr_pay_key: process.env.AMR_PAY_ID,
   amr_pay_id: process.env.AMR_PAY_KEY,
   amr_pay_url: process.env.AMR_PAY_URL,
+  stripe_secret_key: process.env.STRIPE_SECRET_KEY,
+  stripe_api_version: process.env.STRIPE_API_VERSION,
   //   meilisearch_host: process.env.MEILISEARCH_HOST,
   //   meilisearch_master_key: process.env.MEILISEARCH_MASTER_KEY,
   sender_email: process.env.SENDER_EMAIL,

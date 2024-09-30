@@ -1,11 +1,8 @@
 import Stripe from 'stripe';
-import { STRIPE_API_VERSION, STRIPE_SECRET_KEY } from './payment.constant';
-import { Booking } from '../bookings/bookings.model';
-import { Service } from '../service/service.model';
 import { initiatePayment } from './payment.utils';
 
-const stripe = new Stripe(STRIPE_SECRET_KEY, {
-  apiVersion: STRIPE_API_VERSION,
+const stripe = new Stripe(process.env.stripe_secret_key, {
+  apiVersion: process.env.stripe_api_version,
 });
 
 const createPaymentLink = async (userId: string) => {
