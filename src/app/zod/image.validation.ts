@@ -20,7 +20,7 @@ const ImageFileZodSchema = z.object({
     .number()
     .refine(
       (size) => size <= MAX_UPLOAD_SIZE,
-      'File size must be less than 3MB',
+      'File size must be less than 3MB'
     ),
   filename: z.string(),
 });

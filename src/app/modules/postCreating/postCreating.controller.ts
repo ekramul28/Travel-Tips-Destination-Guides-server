@@ -9,8 +9,7 @@ const createPost = catchAsync(async (req, res) => {
   if (!req.files) {
     throw new AppError(400, 'Please upload an image');
   }
-
-  const item = await PostServices.createPostIntoDB(
+  const post = await PostServices.createPostIntoDB(
     req.body,
     req.files as TImageFiles,
   );
@@ -19,7 +18,7 @@ const createPost = catchAsync(async (req, res) => {
     success: true,
     statusCode: httpStatus.OK,
     message: 'Item created successfully',
-    data: item,
+    data: post,
   });
 });
 

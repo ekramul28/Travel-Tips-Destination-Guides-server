@@ -7,8 +7,8 @@ import handleValidationError from '../errors/handleValidationError';
 import handleZodError from '../errors/handleZodError';
 import handleDuplicateError from '../errors/handlerDuplicateError';
 import { TErrorSources } from '../interfaces/error.interface';
-import { TImageFiles } from '../interfaces/image.interface';
-import { deleteImageFromCloudinary } from '../utils/deleteImage';
+// import { TImageFiles } from '../interfaces/image.interface';
+// import { deleteImageFromCloudinary } from '../utils/deleteImage';
 import { ErrorRequestHandler } from 'express';
 
 // eslint-disable-next-line no-unused-vars
@@ -24,9 +24,6 @@ const globalErrorHandler: ErrorRequestHandler = async (err, req, res, next) => {
   ];
 
   // Handle file deletion if files are present
-  if (req.files && Object.keys(req.files).length > 0) {
-    await deleteImageFromCloudinary(req.files as TImageFiles);
-  }
 
   // Handle different error types
   if (err instanceof ZodError) {

@@ -8,7 +8,7 @@ export type TPost = {
   images: string[];
   city: District;
   location: string;
-  status: keyof typeof POST_STATUS;
+  status?: keyof typeof POST_STATUS;
   authorId: ObjectId;
   category: keyof typeof POST_CATEGORY;
   upvote?: number;
