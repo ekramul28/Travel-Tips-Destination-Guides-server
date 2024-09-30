@@ -14,7 +14,7 @@ router.post(
   CommentControllers.createComment,
 );
 
-router.get('/:id', CommentControllers.deleteComment);
+router.get('/:id', CommentControllers.getComment);
 
 router.put(
   '/:id',

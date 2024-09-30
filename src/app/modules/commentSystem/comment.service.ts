@@ -6,7 +6,7 @@ const addComment = async (payload: TComment) => {
   return result;
 };
 const getComment = async (id: string) => {
-  const result = await Comment.findById(id);
+  const result = await Comment.find({ postId: id });
 
   return result;
 };
