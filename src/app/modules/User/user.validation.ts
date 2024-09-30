@@ -19,6 +19,8 @@ const createUserValidationSchema = z.object({
     }),
     status: z.nativeEnum(USER_STATUS).default(USER_STATUS.ACTIVE),
     mobileNumber: z.string().optional(),
+    verified: z.boolean().optional().default(false),
+    flower: z.number().optional().default(0),
   }),
 });
 
@@ -30,6 +32,8 @@ const updateUserValidationSchema = z.object({
     password: z.string().optional(),
     status: z.nativeEnum(USER_STATUS).optional(),
     mobileNumber: z.string().optional(),
+    verified: z.boolean().optional(),
+    flower: z.number().optional(),
   }),
 });
 

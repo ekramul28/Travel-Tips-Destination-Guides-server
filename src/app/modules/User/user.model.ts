@@ -44,13 +44,21 @@ const userSchema = new Schema<TUser, IUserModel>(
     },
     profilePhoto: {
       type: String,
-      default: null
+      default: null,
+    },
+    verified: {
+      type: Boolean,
+      default: false,
+    },
+    flower: {
+      type: Number,
+      default: 0,
     },
   },
   {
     timestamps: true,
     virtuals: true,
-  }
+  },
 );
 
 userSchema.pre('save', async function (next) {
@@ -60,7 +68,7 @@ userSchema.pre('save', async function (next) {
 
   user.password = await bcryptjs.hash(
     user.password,
-    Number(config.bcrypt_salt_rounds)
+    Number(config.bcrypt_salt_rounds),
   );
 
   next();
@@ -78,14 +86,14 @@ userSchema.statics.isUserExistsByEmail = async function (email: string) {
 
 userSchema.statics.isPasswordMatched = async function (
   plainTextPassword,
-  hashedPassword
+  hashedPassword,
 ) {
   return await bcryptjs.compare(plainTextPassword, hashedPassword);
 };
 
 userSchema.statics.isJWTIssuedBeforePasswordChanged = function (
   passwordChangedTimestamp: number,
-  jwtIssuedTimestamp: number
+  jwtIssuedTimestamp: number,
 ) {
   const passwordChangedTime =
     new Date(passwordChangedTimestamp).getTime() / 1000;

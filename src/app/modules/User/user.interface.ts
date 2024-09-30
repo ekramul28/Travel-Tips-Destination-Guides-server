@@ -9,6 +9,8 @@ export type TUser = {
   email: string;
   password: string;
   status: keyof typeof USER_STATUS;
+  verified?: boolean;
+  flower?: number;
   passwordChangedAt?: Date;
   mobileNumber?: string;
   profilePhoto?: string;
@@ -20,10 +22,10 @@ export interface IUserModel extends Model<TUser> {
   isUserExistsByEmail(id: string): Promise<TUser>;
   isPasswordMatched(
     plainTextPassword: string,
-    hashedPassword: string
+    hashedPassword: string,
   ): Promise<boolean>;
   isJWTIssuedBeforePasswordChanged(
     passwordChangedTimestamp: Date,
-    jwtIssuedTimestamp: number
+    jwtIssuedTimestamp: number,
   ): boolean;
 }
