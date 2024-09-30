@@ -7,12 +7,11 @@ import Post from './postCreating.model';
 
 const createPostIntoDB = async (payload: TPost, images: TImageFiles) => {
   const { postImages } = images;
-  //   payload.images = postImages?.map((image) => image.path);
 
   if (postImages && postImages.length > 0) {
     const uploadedImages = await Promise.all(
       postImages.map(async (file) => {
-        const imageName = `${payload.authorId}-${Date.now()}`; // Generate a unique name for each image
+        const imageName = `${payload.authorId}-${Date.now()}`;
         const path = file.path;
 
         // Upload the image to Cloudinary (or another service)
@@ -29,8 +28,6 @@ const createPostIntoDB = async (payload: TPost, images: TImageFiles) => {
     // Assign the uploaded image URLs to the payload
     payload.images = uploadedImages;
   }
-
-  console.log('payload', payload);
 
   const result = await Post.create(payload);
 
