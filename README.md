@@ -38,6 +38,7 @@ npm install
 
 #add .env file
 
+```bash
 NODE_ENV=development
 PORT=3000
 DB_URL=mongodb+srv://<username>:<password>@cluster0.ktxzlkz.mongodb.net/Travel-Tips-Destination?retryWrites=true&w=majority&appName=Cluster0
@@ -62,5 +63,6 @@ MEILISEARCH_HOST=your_meilisearch_host
 MEILISEARCH_MASTER_KEY=your_meilisearch_master_key
 SENDER_EMAIL=your_sender_email@example.com
 SENDER_APP_PASS=your_email_app_password
+```
 
 npm start
