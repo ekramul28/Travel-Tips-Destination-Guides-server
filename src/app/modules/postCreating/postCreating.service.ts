@@ -68,8 +68,8 @@ const getPostFromDB = async (itemId: string) => {
   return result;
 };
 
-const updatePostInDB = async (itemId: string, payload: TPost) => {
-  const result = await Post.findByIdAndUpdate(itemId, payload, { new: true });
+const updatePostInDB = async (PostId: string, payload: TPost) => {
+  const result = await Post.findByIdAndUpdate(PostId, payload, { new: true });
   // if (result) {
   //   await addDocumentToIndex(result, 'items');
   // } else {
