@@ -1,6 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { QueryBuilder } from '../../builder/QueryBuilder';
 import { TImageFiles } from '../../interfaces/image.interface';
 import { sendImageToCloudinary } from '../../utils/sendImageToCloudinary';
+import {
+  SearchItemByDateRangeQueryMaker,
+  SearchItemByUserQueryMaker,
+} from './post.utils';
+import { PostSearchableFields } from './postCreating.constant';
 
 import { TPost } from './postCreating.interface';
 import Post from './postCreating.model';
@@ -34,6 +40,57 @@ const createPostIntoDB = async (payload: TPost, images: TImageFiles) => {
   return result;
 };
 
+const getAllPostFromFromDB = async (query: Record<string, unknown>) => {
+  query = (await SearchItemByUserQueryMaker(query)) || query;
+
+  // Date range search
+  query = (await SearchItemByDateRangeQueryMaker(query)) || query;
+
+  const postQuery = new QueryBuilder(
+    Post.find().populate('user').populate('category'),
+    query,
+  )
+    .filter()
+    .search(PostSearchableFields)
+    .sort()
+    // .paginate()
+    .fields();
+
+  const result = await postQuery.modelQuery;
+
+  return result;
+};
+
+const getPostFromDB = async (itemId: string) => {
+  const result = await Post.findById(itemId)
+    .populate('user')
+    .populate('category');
+  return result;
+};
+
+const updatePostInDB = async (itemId: string, payload: TPost) => {
+  const result = await Post.findByIdAndUpdate(itemId, payload, { new: true });
+  // if (result) {
+  //   await addDocumentToIndex(result, 'items');
+  // } else {
+  //   throw new Error(`Item with ID ${itemId} not found.`);
+  // }
+  return result;
+};
+
+const deletePostFromDB = async (itemId: string) => {
+  const result = await Post.findByIdAndDelete(itemId);
+  // const deletedItemId = result?._id;
+  // if (deletedItemId) {
+  //   await deleteDocumentFromIndex('items', deletedItemId.toString());
+  // }
+  return result;
+};
+
 export const PostServices = {
   createPostIntoDB,
+  getAllPostFromFromDB,
+  getPostFromDB,
+  updatePostInDB,
+  deletePostFromDB,
 };
