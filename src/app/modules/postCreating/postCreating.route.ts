@@ -25,6 +25,7 @@ router.post(
 );
 
 router.get('/', PostControllers.getAllPost);
+router.get('/userPost/:id', PostControllers.getPostByUser);
 
 router.get('/:id', PostControllers.getPost);
 

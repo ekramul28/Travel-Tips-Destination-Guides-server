@@ -5,6 +5,7 @@ import httpStatus from 'http-status';
 import { USER_STATUS } from '../User/user.constant';
 import { TImageFile } from '../../interfaces/image.interface';
 import { TUserProfileUpdate } from './profile.interface';
+import getImageLinkInCloudinary from '../../utils/getImageLinkInCloudinary';
 
 const getMyProfile = async (user: JwtPayload) => {
   const profile = await User.findOne({
@@ -34,13 +35,17 @@ const updateMyProfile = async (
   if (!profile) {
     throw new AppError(httpStatus.NOT_FOUND, 'User profile does not exixts!');
   }
-
   if (profilePhoto) {
-    data.profilePhoto = profilePhoto.path;
+    const uploadedPhotoUrls = await getImageLinkInCloudinary([profilePhoto], { authorId: user._id });
+    if (uploadedPhotoUrls && uploadedPhotoUrls.length > 0) {
+      data.profilePhoto = uploadedPhotoUrls[0]; // Assign the first URL as profile photo
+    }
   } else {
+    // If no new profile photo is provided, remove the existing photo
     delete data.profilePhoto;
   }
 
+  
   return await User.findOneAndUpdate(filter, data, { new: true });
 };
 

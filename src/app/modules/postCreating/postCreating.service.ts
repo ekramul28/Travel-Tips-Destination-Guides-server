@@ -2,7 +2,6 @@
 import { QueryBuilder } from '../../builder/QueryBuilder';
 import { TImageFiles } from '../../interfaces/image.interface';
 import getImageLinkInCloudinary from '../../utils/getImageLinkInCloudinary';
-import { sendImageToCloudinary } from '../../utils/sendImageToCloudinary';
 import {
   SearchItemByDateRangeQueryMaker,
   SearchItemByUserQueryMaker,
@@ -30,7 +29,7 @@ const getAllPostFromFromDB = async (query: Record<string, unknown>) => {
   query = (await SearchItemByDateRangeQueryMaker(query)) || query;
 
   const postQuery = new QueryBuilder(
-    Post.find().populate('user').populate('category'),
+    Post.find().populate('authorId').populate('category'),
     query,
   )
     .filter()
@@ -45,9 +44,13 @@ const getAllPostFromFromDB = async (query: Record<string, unknown>) => {
 };
 
 const getPostFromDB = async (itemId: string) => {
-  const result = await Post.findById(itemId)
-    .populate('user')
-    .populate('category');
+  const result = await Post.findById(itemId).populate('authorId');
+  return result;
+};
+const getPostByUserFromDB = async (authorId: string) => {
+  console.log('authorId', authorId);
+  const result = await Post.find({ authorId });
+  console.log(result);
   return result;
 };
 
@@ -73,6 +76,7 @@ const deletePostFromDB = async (itemId: string) => {
 export const PostServices = {
   createPostIntoDB,
   getAllPostFromFromDB,
+  getPostByUserFromDB,
   getPostFromDB,
   updatePostInDB,
   deletePostFromDB,

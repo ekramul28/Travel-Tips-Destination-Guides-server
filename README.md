@@ -30,13 +30,13 @@
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/ekramul28/travel-tips-destination-guides.git
-   cd travel-tips-destination-guides
+   git clone https://github.com/ekramul28/Travel-Tips-Destination-Guides-server
+   cd Travel-Tips-Destination-Guides-servergit
    ```
 
 npm install
 
-#add .env file
+## add .env file
 
 ```bash
 NODE_ENV=development
@@ -66,3 +66,7 @@ SENDER_APP_PASS=your_email_app_password
 ```
 
 npm start
+
+## server start
+
+npm run start:dev

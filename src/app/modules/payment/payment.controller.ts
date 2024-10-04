@@ -1,7 +1,7 @@
 import httpStatus from 'http-status';
 import { createPaymentLinkService } from './payment.service';
-import catchAsync from '../../app/utils/catchAsync';
-import sendResponse from '../../app/utils/sendResponse';
+import { catchAsync } from '../../utils/catchAsync';
+import sendResponse from '../../utils/sendResponse';
 
 const stripePayment = catchAsync(async (req, res) => {
   const { id } = req.body;
