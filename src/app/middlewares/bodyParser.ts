@@ -6,6 +6,6 @@ export const parseBody = catchAsync(async (req, res, next) => {
     throw new AppError(400, 'Please provide data in the body under data key');
   }
   req.body = JSON.parse(req.body.data);
-  console.log('inside body', req.body.data);
+  console.log('inside body', req.body);
   next();
 });

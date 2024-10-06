@@ -4,6 +4,7 @@ import { ProfileRoutes } from '../modules/Profile/profile.route';
 import { PostRoutes } from '../modules/postCreating/postCreating.route';
 import { UserRoutes } from '../modules/User/user.route';
 import { CommentRoutes } from '../modules/commentSystem/comment.route';
+import { ItemCategoryRoutes } from '../modules/ItemCategory/itemCategory.route';
 
 const router = express.Router();
 
@@ -23,6 +24,10 @@ const moduleRoutes = [
   {
     path: '/comment',
     route: CommentRoutes,
+  },
+  {
+    path: '/item-categories',
+    route: ItemCategoryRoutes,
   },
   {
     path: '/profile',

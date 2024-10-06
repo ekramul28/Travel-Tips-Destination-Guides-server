@@ -47,13 +47,12 @@ const getPost = catchAsync(async (req, res) => {
 const getPostByUser = catchAsync(async (req, res) => {
   const userId = req.params.id;
   console.log('man', userId);
-  const item = await PostServices.getPostByUserFromDB(userId);
-  console.log(item);
+  const result = await PostServices.getPostByUserFromDB(userId);
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
     message: 'post retrieved successfully',
-    data: item,
+    data: result,
   });
 });
 

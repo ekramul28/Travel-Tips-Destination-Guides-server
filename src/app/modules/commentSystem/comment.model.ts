@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import { model, Schema } from 'mongoose';
 import { TComment } from './comment.interface';
 
 const commentSchema = new Schema<TComment>(
@@ -14,4 +14,4 @@ const commentSchema = new Schema<TComment>(
 );
 
 // Mongoose Model
-export const Comment = mongoose.model<TComment>('Comment', commentSchema);
+export const Comment = model<TComment>('Comment', commentSchema);

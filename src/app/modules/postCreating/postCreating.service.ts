@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import mongoose from 'mongoose';
 import { QueryBuilder } from '../../builder/QueryBuilder';
 import { TImageFiles } from '../../interfaces/image.interface';
 import getImageLinkInCloudinary from '../../utils/getImageLinkInCloudinary';
@@ -16,7 +17,7 @@ const createPostIntoDB = async (payload: TPost, images: TImageFiles) => {
 
   await getImageLinkInCloudinary(postImages, payload);
 
-  console.log(payload);
+  console.log('payload', payload);
   const result = await Post.create(payload);
 
   return result;
@@ -49,8 +50,9 @@ const getPostFromDB = async (itemId: string) => {
 };
 const getPostByUserFromDB = async (authorId: string) => {
   console.log('authorId', authorId);
-  const result = await Post.find({ authorId });
-  console.log(result);
+  const objectId = new mongoose.Types.ObjectId('66fc129df50b70b80fbea929');
+  const result = await Post.find({ authorId: objectId });
+  console.log('no post', result);
   return result;
 };
 
