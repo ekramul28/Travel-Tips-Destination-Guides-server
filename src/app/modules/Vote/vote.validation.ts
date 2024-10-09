@@ -12,3 +12,8 @@ export const voteValidationSchema = z.object({
     voteType: z.enum(['upvote', 'downvote']),
   }),
 });
+export const EditVoteValidation = z.object({
+  body: z.object({
+    voteType: z.enum(['upvote', 'downvote']).optional(),
+  }),
+});

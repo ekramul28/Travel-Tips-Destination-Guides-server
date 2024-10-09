@@ -22,21 +22,22 @@ export class QueryBuilder<T> {
         (field) =>
           ({
             [field]: new RegExp(searchTerm, 'i'),
-          } as FilterQuery<T>)
+          }) as FilterQuery<T>,
       ),
     });
     return this;
   }
   paginate() {
-    let limit: number = Number(this.query?.limit || 10);
+    let limit: number = Number(this.query?.limit || 2);
 
     let skip: number = 0;
 
     if (this.query?.page) {
       const page: number = Number(this.query?.page || 1);
       skip = Number((page - 1) * limit);
+      console.log('this is page ', this.query);
+      console.log('this is skip', skip);
     }
-
     this.modelQuery = this.modelQuery.skip(skip).limit(limit);
 
     return this;

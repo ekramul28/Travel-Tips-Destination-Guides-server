@@ -5,6 +5,7 @@ import { PostRoutes } from '../modules/postCreating/postCreating.route';
 import { UserRoutes } from '../modules/User/user.route';
 import { CommentRoutes } from '../modules/commentSystem/comment.route';
 import { ItemCategoryRoutes } from '../modules/ItemCategory/itemCategory.route';
+import { VoteRoutes } from '../modules/Vote/vote.route';
 
 const router = express.Router();
 
@@ -20,6 +21,10 @@ const moduleRoutes = [
   {
     path: '/post',
     route: PostRoutes,
+  },
+  {
+    path: '/vote',
+    route: VoteRoutes,
   },
   {
     path: '/comment',

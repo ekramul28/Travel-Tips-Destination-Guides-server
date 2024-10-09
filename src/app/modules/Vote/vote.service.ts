@@ -24,7 +24,7 @@ const deleteVote = async (commentId: string) => {
   return result;
 };
 
-export const CommentServices = {
+export const voteServices = {
   addVote,
   getVote,
   updateVote,
