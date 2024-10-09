@@ -21,6 +21,7 @@ export const PostValidation = z.object({
     }),
     upvote: z.number().min(0).optional().default(0),
     downvote: z.number().min(0).optional().default(0),
+    comment: z.number().min(0).optional().default(0),
   }),
 });
 
@@ -58,6 +59,7 @@ export const UpdatePostValidation = z.object({
         .optional(),
       upvote: z.number().min(0).optional(),
       downvote: z.number().min(0).optional(),
+      comment: z.number().min(0).optional(),
     })
     .partial(),
 });

@@ -6,10 +6,16 @@ import { voteServices } from './vote.service';
 const createVote = catchAsync(async (req, res) => {
   const result = await voteServices.addVote(req.body);
 
+  let message: string;
+  if ('message' in result) {
+    message = result.message;
+  } else {
+    message = 'Vote added!';
+  }
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'Vote added!',
+    message,
     data: result,
   });
 });

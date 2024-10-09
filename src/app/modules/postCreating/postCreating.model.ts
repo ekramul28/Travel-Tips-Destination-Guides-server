@@ -3,7 +3,7 @@ import { TPost } from './postCreating.interface';
 import { POST_CATEGORY, POST_STATUS } from './postCreating.constant';
 
 // Define the schema for the post
-const PostSchema: Schema = new Schema(
+const PostSchema: Schema = new Schema<TPost>(
   {
     title: {
       type: String,
@@ -42,14 +42,14 @@ const PostSchema: Schema = new Schema(
       enum: Object.values(POST_CATEGORY),
       required: true,
     },
-    upvote: {
-      type: Number,
-      default: 0,
-    },
-    downvote: {
-      type: Number,
-      default: 0,
-    },
+
+    vote: [{ type: mongoose.Types.ObjectId, ref: 'Vote' }],
+    comment: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: 'Comment',
+      },
+    ],
   },
   {
     timestamps: true,

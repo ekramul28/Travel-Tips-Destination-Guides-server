@@ -1,5 +1,7 @@
-import { ObjectId } from 'mongoose';
+import mongoose, { ObjectId } from 'mongoose';
 import { DISTRICTS, POST_CATEGORY, POST_STATUS } from './postCreating.constant';
+import { TComment } from '../commentSystem/comment.interface';
+import { TVote } from '../Vote/vote.interface';
 type District = (typeof DISTRICTS)[number];
 
 export type TPost = {
@@ -11,8 +13,8 @@ export type TPost = {
   status?: keyof typeof POST_STATUS;
   authorId: ObjectId;
   category: keyof typeof POST_CATEGORY;
-  upvote?: number;
-  downvote?: number;
+  vote?: mongoose.Types.ObjectId[];
+  comment?: mongoose.Types.ObjectId[];
   createdAt?: Date;
   updatedAt?: Date;
 };
