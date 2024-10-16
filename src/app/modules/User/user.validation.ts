@@ -20,7 +20,8 @@ const createUserValidationSchema = z.object({
     status: z.nativeEnum(USER_STATUS).default(USER_STATUS.ACTIVE),
     mobileNumber: z.string().optional(),
     verified: z.boolean().optional().default(false),
-    flower: z.number().optional().default(0),
+    followers: z.array(z.string()).optional(),
+    following: z.array(z.string()).optional(),
   }),
 });
 
@@ -33,7 +34,8 @@ const updateUserValidationSchema = z.object({
     status: z.nativeEnum(USER_STATUS).optional(),
     mobileNumber: z.string().optional(),
     verified: z.boolean().optional(),
-    flower: z.number().optional(),
+    followers: z.array(z.string()).optional(),
+    following: z.array(z.string()).optional(),
   }),
 });
 

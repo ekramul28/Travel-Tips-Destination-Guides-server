@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-escape */
 import bcryptjs from 'bcryptjs';
-import { Schema, model } from 'mongoose';
+import mongoose, { Schema, model } from 'mongoose';
 import config from '../../config';
 import { USER_ROLE, USER_STATUS } from './user.constant';
 import { IUserModel, TUser } from './user.interface';
@@ -50,10 +50,8 @@ const userSchema = new Schema<TUser, IUserModel>(
       type: Boolean,
       default: false,
     },
-    flower: {
-      type: Number,
-      default: 0,
-    },
+    followers: [{ type: mongoose.Types.ObjectId, ref: 'User' }],
+    following: [{ type: mongoose.Types.ObjectId, ref: 'User' }],
   },
   {
     timestamps: true,
@@ -65,7 +63,12 @@ userSchema.pre('save', async function (next) {
   // eslint-disable-next-line @typescript-eslint/no-this-alias
   const user = this; // doc
   // hashing password and save into DB
-
+  if (!user.isModified('password')) {
+    return next();
+  }
+  if (!user.password) {
+    throw new Error('Password is required');
+  }
   user.password = await bcryptjs.hash(
     user.password,
     Number(config.bcrypt_salt_rounds),

@@ -19,9 +19,8 @@ export const PostValidation = z.object({
     category: z.nativeEnum(POST_CATEGORY, {
       errorMap: () => ({ message: 'Invalid category' }),
     }),
-    upvote: z.number().min(0).optional().default(0),
-    downvote: z.number().min(0).optional().default(0),
-    comment: z.number().min(0).optional().default(0),
+    vote: z.array(z.string()).optional(),
+    comment: z.array(z.string()).optional(),
   }),
 });
 
@@ -57,9 +56,8 @@ export const UpdatePostValidation = z.object({
           errorMap: () => ({ message: 'Invalid category' }),
         })
         .optional(),
-      upvote: z.number().min(0).optional(),
-      downvote: z.number().min(0).optional(),
-      comment: z.number().min(0).optional(),
+      vote: z.array(z.string()).optional(),
+      comment: z.array(z.string()).optional().optional(),
     })
     .partial(),
 });

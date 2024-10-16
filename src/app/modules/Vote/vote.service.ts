@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ClientSession, startSession } from 'mongoose';
+import mongoose, { ClientSession, startSession } from 'mongoose';
 import { QueryBuilder } from '../../builder/QueryBuilder';
 import Post from '../postCreating/postCreating.model';
 import { TVote } from './vote.interface';
@@ -12,7 +12,10 @@ const addVote = async (payload: TVote) => {
 
   try {
     // Fetch the post within the session
-    const post = await Post.findById(postId).session(session);
+    const objectId = new mongoose.Types.ObjectId(postId);
+
+    const post = await Post.findOne({ _id: objectId }).session(session);
+
     if (!post) {
       throw new Error('Post Not Found');
     }
@@ -61,7 +64,7 @@ const addVote = async (payload: TVote) => {
     await newVote.save({ session });
 
     // Add the new vote's _id to the post's vote array
-    if (post.vote && post.vote.length > 0) {
+    if (post.vote) {
       post.vote.push(newVote._id);
       await post.save({ session });
     }

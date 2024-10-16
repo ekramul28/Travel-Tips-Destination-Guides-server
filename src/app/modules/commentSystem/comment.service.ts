@@ -1,9 +1,48 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import mongoose, { ClientSession, startSession } from 'mongoose';
 import { TComment } from './comment.interface';
 import { Comment } from './comment.model';
+import Post from '../postCreating/postCreating.model';
 
 const addComment = async (payload: TComment) => {
-  const result = await Comment.create(payload);
-  return result;
+  const { postId } = payload;
+  const session: ClientSession = await startSession();
+  session.startTransaction();
+
+  try {
+    // Fetch the post within the session
+    const objectId = new mongoose.Types.ObjectId(postId);
+
+    const post = await Post.findOne({ _id: objectId }).session(session);
+
+    if (!post) {
+      throw new Error('Post Not Found');
+    }
+
+    const result = await Comment.create(payload);
+
+    // Add the new vote's _id to the post's vote array
+    if (post.comment) {
+      post.comment.push(result._id);
+      await post.save({ session });
+    }
+
+    await session.commitTransaction();
+    session.endSession();
+
+    return {
+      message: 'Comment added',
+      vote: result,
+    };
+  } catch (error: any) {
+    // If any error occurs, abort the transaction
+    await session.abortTransaction();
+    session.endSession();
+
+    return {
+      error: error.message || 'An error occurred while processing the vote.',
+    };
+  }
 };
 const getComment = async (id: string) => {
   const result = await Comment.find({ postId: id });
@@ -23,10 +62,7 @@ const updateComment = async (
 };
 const deleteComment = async (commentId: string) => {
   const result = await Comment.findByIdAndDelete(commentId);
-  // const deletedItemId = result?._id;
-  // if (deletedItemId) {
-  //   await deleteDocumentFromIndex('items', deletedItemId.toString());
-  // }
+
   return result;
 };
 

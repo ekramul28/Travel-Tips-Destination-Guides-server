@@ -1,7 +1,6 @@
 import mongoose, { ObjectId } from 'mongoose';
 import { DISTRICTS, POST_CATEGORY, POST_STATUS } from './postCreating.constant';
-import { TComment } from '../commentSystem/comment.interface';
-import { TVote } from '../Vote/vote.interface';
+
 type District = (typeof DISTRICTS)[number];
 
 export type TPost = {

@@ -36,8 +36,20 @@ const getSingleUser = catchAsync(async (req, res) => {
   });
 });
 
+const addFollower = catchAsync(async (req, res) => {
+  await UserServices.addFollow(req.body);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Follower successfully',
+    data: null,
+  });
+});
+
 export const UserControllers = {
   getSingleUser,
   userRegister,
+  addFollower,
   getAllUsers,
 };

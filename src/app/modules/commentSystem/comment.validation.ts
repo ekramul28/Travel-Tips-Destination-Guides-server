@@ -10,7 +10,7 @@ const objectIdValidation = z
 export const CommentValidation = z.object({
   body: z.object({
     postId: objectIdValidation,
-    authorId: objectIdValidation,
+    userId: objectIdValidation,
     content: z.string().min(1, { message: 'Content is required' }),
     parentId: objectIdValidation.optional(),
   }),

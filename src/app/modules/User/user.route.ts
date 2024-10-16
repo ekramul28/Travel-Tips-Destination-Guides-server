@@ -15,5 +15,6 @@ router.post(
 );
 router.get('/', auth(USER_ROLE.ADMIN), UserControllers.getAllUsers);
 router.get('/:id', UserControllers.getSingleUser);
+router.post('/follow', auth(USER_ROLE.USER), UserControllers.addFollower);
 
 export const UserRoutes = router;

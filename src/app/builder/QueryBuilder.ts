@@ -28,12 +28,12 @@ export class QueryBuilder<T> {
     return this;
   }
   paginate() {
-    let limit: number = Number(this.query?.limit || 2);
+    let limit: number = Number(this.query?.limit || 10);
 
     let skip: number = 0;
 
     if (this.query?.page) {
-      const page: number = Number(this.query?.page || 1);
+      const page: number = Number(this.query?.page || 10);
       skip = Number((page - 1) * limit);
       console.log('this is page ', this.query);
       console.log('this is skip', skip);

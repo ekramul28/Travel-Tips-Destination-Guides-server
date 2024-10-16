@@ -11,13 +11,13 @@ import { PostSearchableFields } from './postCreating.constant';
 
 import { TPost } from './postCreating.interface';
 import Post from './postCreating.model';
+import { User } from '../User/user.model';
 
 const createPostIntoDB = async (payload: TPost, images: TImageFiles) => {
   const { postImages } = images;
 
   await getImageLinkInCloudinary(postImages, payload);
 
-  console.log('payload', payload);
   const result = await Post.create(payload);
 
   return result;
@@ -30,7 +30,17 @@ const getAllPostFromFromDB = async (query: Record<string, unknown>) => {
   query = (await SearchItemByDateRangeQueryMaker(query)) || query;
 
   const postQuery = new QueryBuilder(
-    Post.find().populate('authorId').populate('category'),
+    Post.find()
+      .populate('authorId')
+      .populate('category')
+      .populate('vote')
+      .populate({
+        path: 'comment',
+        populate: {
+          path: 'userId',
+          model: 'User',
+        },
+      }),
     query,
   )
     .filter()
@@ -45,14 +55,19 @@ const getAllPostFromFromDB = async (query: Record<string, unknown>) => {
 };
 
 const getPostFromDB = async (itemId: string) => {
-  const result = await Post.findById(itemId).populate('authorId');
+  const result = await Post.findById(itemId)
+    .populate('authorId')
+    .populate('vote');
   return result;
 };
 const getPostByUserFromDB = async (authorId: string) => {
-  console.log('authorId', authorId);
-  const objectId = new mongoose.Types.ObjectId('66fc129df50b70b80fbea929');
-  const result = await Post.find({ authorId: objectId });
-  console.log('no post', result);
+  const objectId = new mongoose.Types.ObjectId(authorId);
+  const result = await Post.find({ authorId: objectId })
+    .populate('authorId')
+    .populate({
+      path: 'vote', // Populate the vote field
+      populate: { path: 'userId', select: 'name profilePhoto' }, // Optionally populate the user who voted
+    });
   return result;
 };
 
@@ -75,11 +90,45 @@ const deletePostFromDB = async (itemId: string) => {
   return result;
 };
 
+const addFollow = async (payload: { userId: string; followId: string }) => {
+  const objectId = new mongoose.Types.ObjectId(payload.userId);
+  const followObjectId = new mongoose.Types.ObjectId(payload.followId);
+
+  // Find the user and the follow user by their IDs
+  const user = await User.findOne({ _id: objectId });
+  const follow = await User.findOne({ _id: followObjectId });
+
+  // Check if both users exist
+  if (!user) {
+    throw new Error('User not found');
+  }
+  if (!follow) {
+    throw new Error('User to follow not found');
+  }
+
+  // Add the followId to the user's following array if not already followed
+  if (!user?.following.includes(payload?.followId)) {
+    user?.following.push(followObjectId);
+    await user.save();
+  }
+
+  // Add the userId to the follow's followers array if not already followed
+  if (!follow.followers.includes(payload.userId)) {
+    follow?.followers.push(objectId);
+    await follow.save();
+  }
+
+  // Save both users
+
+  return user;
+};
+
 export const PostServices = {
   createPostIntoDB,
   getAllPostFromFromDB,
   getPostByUserFromDB,
   getPostFromDB,
   updatePostInDB,
+  addFollow,
   deletePostFromDB,
 };
