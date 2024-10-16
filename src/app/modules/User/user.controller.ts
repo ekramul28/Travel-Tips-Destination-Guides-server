@@ -46,10 +46,21 @@ const addFollower = catchAsync(async (req, res) => {
     data: null,
   });
 });
+const removeFollow = catchAsync(async (req, res) => {
+  await UserServices.removeFollow(req.body);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'UnFollower successfully',
+    data: null,
+  });
+});
 
 export const UserControllers = {
   getSingleUser,
   userRegister,
+  removeFollow,
   addFollower,
   getAllUsers,
 };

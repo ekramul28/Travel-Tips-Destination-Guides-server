@@ -115,9 +115,95 @@ const addFollow = async (payload: IAddFollowPayload) => {
   }
 };
 
+const removeFollow = async (payload: IAddFollowPayload) => {
+  const { userId, followId } = payload;
+
+  // Validate ObjectIds
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    throw new Error('Invalid userId');
+  }
+  if (!mongoose.Types.ObjectId.isValid(followId)) {
+    throw new Error('Invalid followId');
+  }
+
+  // Prevent users from unfollowing themselves
+  if (userId === followId) {
+    throw new Error('You cannot unfollow yourself');
+  }
+
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    // Convert to ObjectId
+    const userObjectId = new mongoose.Types.ObjectId(userId);
+    const followObjectId = new mongoose.Types.ObjectId(followId);
+
+    // Fetch both users within the session
+    const [follower, targetUser] = await Promise.all([
+      User.findById(userObjectId).session(session),
+      User.findById(followObjectId).session(session),
+    ]);
+
+    // Check if both users exist
+    if (!follower) {
+      throw new Error('User not found');
+    }
+    if (!targetUser) {
+      throw new Error('User to unfollow not found');
+    }
+
+    let isFollowing;
+
+    if (follower?.following) {
+      isFollowing = follower.following.some((id) => id.toString() === followId);
+    }
+
+    // Check if not following
+    if (!isFollowing) {
+      throw new Error('You are not following this user');
+    }
+
+    if (follower?.following) {
+      // Remove followId from follower's following array
+      follower.following = follower.following.filter(
+        (id) => id.toString() !== followId,
+      );
+    }
+
+    if (targetUser?.followers) {
+      // Remove userId from targetUser's followers array
+      targetUser.followers = targetUser.followers.filter(
+        (id) => id.toString() !== userId,
+      );
+    }
+
+    // Save both users
+    await Promise.all([
+      follower.save({ session }),
+      targetUser.save({ session }),
+    ]);
+
+    // Commit the transaction
+    await session.commitTransaction();
+    session.endSession();
+
+    return {
+      message: 'Successfully unfollowed the user',
+      follower,
+    };
+  } catch (error) {
+    // Abort the transaction in case of error
+    await session.abortTransaction();
+    session.endSession();
+    throw error;
+  }
+};
+
 export const UserServices = {
   createUser,
   addFollow,
+  removeFollow,
   getAllUsersFromDB,
   getSingleUserFromDB,
 };
