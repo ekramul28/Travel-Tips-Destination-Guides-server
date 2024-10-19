@@ -4,6 +4,8 @@ import { USER_ROLE } from '../User/user.constant';
 import { ProfileController } from './profile.controller';
 import { parseBody } from '../../middlewares/bodyParser';
 import { upload } from '../../utils/sendImageToCloudinary';
+import validateImageFileRequest from '../../middlewares/validateImageFileRequest';
+import { ImageFilesArrayZodSchema } from '../../zod/image.validation';
 
 const router = express.Router();
 
@@ -14,9 +16,10 @@ router.get(
 );
 
 router.patch(
-  '/',
+  '/updateMyProfile',
   auth(USER_ROLE.ADMIN, USER_ROLE.USER),
-  upload.single('profilePhoto'),
+  upload.fields([{ name: 'profilePhoto' }]),
+
   parseBody,
   ProfileController.updateMyProfile,
 );

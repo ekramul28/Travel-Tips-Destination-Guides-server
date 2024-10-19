@@ -46,6 +46,14 @@ const userSchema = new Schema<TUser, IUserModel>(
       type: String,
       default: null,
     },
+    website: {
+      type: String,
+      default: null,
+    },
+    bio: {
+      type: String,
+      default: null,
+    },
     verified: {
       type: Boolean,
       default: false,

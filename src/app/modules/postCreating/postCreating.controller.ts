@@ -46,7 +46,6 @@ const getPost = catchAsync(async (req, res) => {
 });
 const getPostByUser = catchAsync(async (req, res) => {
   const userId = req.params.id;
-  console.log('man', userId);
   const result = await PostServices.getPostByUserFromDB(userId);
   sendResponse(res, {
     success: true,

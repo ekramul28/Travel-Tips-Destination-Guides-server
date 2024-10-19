@@ -5,9 +5,9 @@ const getImageLinkInCloudinary = async (postImages: any[], payload: any) => {
   if (postImages && postImages.length > 0) {
     const uploadedImages = await Promise.all(
       postImages.map(async (file: any) => {
-        const imageName = `${payload.authorId}-${Date.now()}`;
+        const imageName = `${payload?.authorId}-${Date.now()}`;
         const path = file.path;
-
+        console.log('inside image', file);
         // Upload the image to Cloudinary (or another service)
         const { secure_url }: any = await sendImageToCloudinary(
           imageName,
@@ -20,7 +20,11 @@ const getImageLinkInCloudinary = async (postImages: any[], payload: any) => {
     );
 
     // Assign the uploaded image URLs to the payload
-    payload.images = uploadedImages;
+    if (payload.images) {
+      payload.images = uploadedImages;
+    } else {
+      payload.profilePhoto = uploadedImages[0];
+    }
   }
 };
 

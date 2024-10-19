@@ -4,6 +4,7 @@ import sendResponse from '../../utils/sendResponse';
 import httpStatus from 'http-status';
 import { ProfileServices } from './profile.service';
 import { TImageFile } from '../../interfaces/image.interface';
+import AppError from '../../errors/AppError';
 
 const getMyProfile = catchAsync(async (req: Request, res: Response) => {
   const user = req.user;
@@ -18,10 +19,13 @@ const getMyProfile = catchAsync(async (req: Request, res: Response) => {
 });
 
 const updateMyProfile = catchAsync(async (req, res) => {
+  if (!req.files) {
+    throw new AppError(400, 'Please upload an image');
+  }
   const result = await ProfileServices.updateMyProfile(
     req.user,
     req.body,
-    req.file as TImageFile,
+    req.files as TImageFile[],
   );
 
   sendResponse(res, {

@@ -11,6 +11,10 @@ export type TRegisterUser = {
   mobileNumber: string;
   password: string;
   role: keyof typeof USER_ROLE;
+  website?: string;
+  bio?: string;
+  following?: [];
+  followers?: [];
   verified?: boolean;
   flower?: number;
   passwordChangedAt?: Date;

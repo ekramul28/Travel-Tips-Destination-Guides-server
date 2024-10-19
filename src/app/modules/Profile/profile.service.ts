@@ -23,8 +23,11 @@ const getMyProfile = async (user: JwtPayload) => {
 const updateMyProfile = async (
   user: JwtPayload,
   data: Partial<TUserProfileUpdate>,
-  profilePhoto: TImageFile,
+  profilePhoto: TImageFile[],
 ) => {
+  console.log({ data });
+  console.log({ profilePhoto });
+
   const filter = {
     email: user.email,
     status: USER_STATUS.ACTIVE,
@@ -35,17 +38,11 @@ const updateMyProfile = async (
   if (!profile) {
     throw new AppError(httpStatus.NOT_FOUND, 'User profile does not exixts!');
   }
-  if (profilePhoto) {
-    const uploadedPhotoUrls = await getImageLinkInCloudinary([profilePhoto], { authorId: user._id });
-    if (uploadedPhotoUrls && uploadedPhotoUrls.length > 0) {
-      data.profilePhoto = uploadedPhotoUrls[0]; // Assign the first URL as profile photo
-    }
-  } else {
-    // If no new profile photo is provided, remove the existing photo
-    delete data.profilePhoto;
-  }
 
-  
+  await getImageLinkInCloudinary(profilePhoto, {
+    data,
+  });
+
   return await User.findOneAndUpdate(filter, data, { new: true });
 };
 

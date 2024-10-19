@@ -9,6 +9,8 @@ export type TUser = {
   email: string;
   password: string;
   status: keyof typeof USER_STATUS;
+  website?: string;
+  bio?: string;
   verified?: boolean;
   followers?: mongoose.Types.ObjectId[];
   following?: mongoose.Types.ObjectId[];
