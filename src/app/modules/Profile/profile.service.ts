@@ -6,6 +6,7 @@ import { USER_STATUS } from '../User/user.constant';
 import { TImageFile } from '../../interfaces/image.interface';
 import { TUserProfileUpdate } from './profile.interface';
 import getImageLinkInCloudinary from '../../utils/getImageLinkInCloudinary';
+import uploadImagesToCloudinary from '../../utils/imageGeneratorFunction';
 
 const getMyProfile = async (user: JwtPayload) => {
   const profile = await User.findOne({
@@ -22,12 +23,9 @@ const getMyProfile = async (user: JwtPayload) => {
 
 const updateMyProfile = async (
   user: JwtPayload,
-  data: Partial<TUserProfileUpdate>,
+  payload: Partial<TUserProfileUpdate>,
   profilePhoto: TImageFile[],
 ) => {
-  console.log({ data });
-  console.log({ profilePhoto });
-
   const filter = {
     email: user.email,
     status: USER_STATUS.ACTIVE,
@@ -38,12 +36,11 @@ const updateMyProfile = async (
   if (!profile) {
     throw new AppError(httpStatus.NOT_FOUND, 'User profile does not exixts!');
   }
+  const res = await uploadImagesToCloudinary(profilePhoto.profilePhoto);
+  // await getImageLinkInCloudinary(profilePhoto, payload);
+  payload.profilePhoto = res[0];
 
-  await getImageLinkInCloudinary(profilePhoto, {
-    data,
-  });
-
-  return await User.findOneAndUpdate(filter, data, { new: true });
+  return await User.findOneAndUpdate(filter, payload, { new: true });
 };
 
 export const ProfileServices = {

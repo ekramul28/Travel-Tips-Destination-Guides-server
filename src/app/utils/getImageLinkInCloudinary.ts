@@ -1,13 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { sendImageToCloudinary } from './sendImageToCloudinary';
 
-const getImageLinkInCloudinary = async (postImages: any[], payload: any) => {
-  if (postImages && postImages.length > 0) {
+const getImageLinkInCloudinary = async (profilePhoto: any[], payload: any) => {
+  console.log('filefile', profilePhoto.profilePhoto);
+  console.log('filefile2', payload);
+  if (profilePhoto) {
     const uploadedImages = await Promise.all(
-      postImages.map(async (file: any) => {
+      profilePhoto.map(async (file: any) => {
         const imageName = `${payload?.authorId}-${Date.now()}`;
         const path = file.path;
         console.log('inside image', file);
+        console.log('inside path', path);
         // Upload the image to Cloudinary (or another service)
         const { secure_url }: any = await sendImageToCloudinary(
           imageName,

@@ -19,7 +19,7 @@ router.patch(
   '/updateMyProfile',
   auth(USER_ROLE.ADMIN, USER_ROLE.USER),
   upload.fields([{ name: 'profilePhoto' }]),
-
+  validateImageFileRequest(ImageFilesArrayZodSchema),
   parseBody,
   ProfileController.updateMyProfile,
 );
