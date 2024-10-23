@@ -46,10 +46,7 @@ const createPaymentLink = async (userId: string) => {
   return session;
 };
 
-const amrPayPayment = async (data: {
-  totalPrice: number;
-  totalHoursInDecimal: number;
-}) => {
+const amrPayPayment = async (data: { totalPrice: number; userId: number }) => {
   const result = await initiatePayment(data);
 
   return result;

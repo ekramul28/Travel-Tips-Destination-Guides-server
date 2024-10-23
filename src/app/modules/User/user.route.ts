@@ -13,7 +13,7 @@ router.post(
   validateRequest(UserValidation.createUserValidationSchema),
   UserControllers.userRegister,
 );
-router.get('/', auth(USER_ROLE.ADMIN), UserControllers.getAllUsers);
+router.get('/', UserControllers.getAllUsers);
 router.get('/:id', UserControllers.getSingleUser);
 router.post('/follow', auth(USER_ROLE.USER), UserControllers.addFollower);
 router.post('/unFollow', auth(USER_ROLE.USER), UserControllers.removeFollow);

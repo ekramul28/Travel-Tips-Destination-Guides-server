@@ -2,7 +2,6 @@
 import mongoose from 'mongoose';
 import { QueryBuilder } from '../../builder/QueryBuilder';
 import { TImageFiles } from '../../interfaces/image.interface';
-import getImageLinkInCloudinary from '../../utils/getImageLinkInCloudinary';
 import {
   SearchItemByDateRangeQueryMaker,
   SearchItemByUserQueryMaker,
@@ -11,11 +10,14 @@ import { PostSearchableFields } from './postCreating.constant';
 
 import { TPost } from './postCreating.interface';
 import Post from './postCreating.model';
+import uploadImagesToCloudinary from '../../utils/imageGeneratorFunction';
 
 const createPostIntoDB = async (payload: TPost, images: TImageFiles) => {
   const { postImages } = images;
 
-  await getImageLinkInCloudinary(postImages, payload);
+  const imageLink = await uploadImagesToCloudinary(postImages);
+
+  payload.images = imageLink;
 
   const result = await Post.create(payload);
 
@@ -56,7 +58,14 @@ const getAllPostFromFromDB = async (query: Record<string, unknown>) => {
 const getPostFromDB = async (itemId: string) => {
   const result = await Post.findById(itemId)
     .populate('authorId')
-    .populate('vote');
+    .populate('vote')
+    .populate({
+      path: 'comment',
+      populate: {
+        path: 'userId',
+        model: 'User',
+      },
+    });
   return result;
 };
 const getPostByUserFromDB = async (authorId: string) => {
