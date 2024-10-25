@@ -1,10 +1,46 @@
-import mongoose, { Schema } from "mongoose";
-import { ICart } from "./payment.interface";
+import { model, Schema } from 'mongoose';
+import { TPaymentDetails } from './payment.interface';
+import { number } from 'zod';
 
-const CartSchema: Schema = new Schema({
-  product: { type: Schema.Types.ObjectId, ref: "Product" },
-  productQuantity: { type: Number, required: true },
-  email: { type: String, required: true },
-});
+const PaymentDetailsSchema = new Schema<TPaymentDetails>(
+  {
+    userId: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+    payment_processor: {
+      type: String,
+      required: true,
+    },
+    bank_trxid: {
+      type: String,
+      required: true,
+    },
+    pg_txnid: {
+      type: String,
+      required: true,
+    },
+    mer_txnid: {
+      type: String,
+      required: true,
+    },
+    amount: {
+      type: number,
+      required: true,
+    },
+    payment_type: {
+      type: String,
+      required: true,
+    },
+  },
+  { timestamps: true },
+); // Optionally include timestamps
 
-export const PaymentCart = mongoose.model<ICart>("PaymentCart", CartSchema);
+export const PaymentDetails = model<TPaymentDetails>(
+  'PaymentDetails',
+  PaymentDetailsSchema,
+);

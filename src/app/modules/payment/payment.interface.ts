@@ -1,14 +1,10 @@
-import mongoose from 'mongoose';
-
-interface IProduct {
-  title: string;
-  price: number;
-  // other fields as needed
-}
-
-export interface ICart {
-  product: IProduct | mongoose.Types.ObjectId;
-  productQuantity: number;
+export interface TPaymentDetails {
+  userId: string;
   email: string;
-  // other fields as needed
+  payment_processor: string;
+  bank_trxid: string;
+  amount: number;
+  pg_txnid: string;
+  mer_txnid: string;
+  payment_type: string;
 }
