@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import httpStatus from 'http-status';
 import { createPaymentLinkService } from './payment.service';
 import { catchAsync } from '../../utils/catchAsync';
@@ -69,7 +72,7 @@ const afterPaymentPage = catchAsync(async (req, res) => {
         </body>
       </html>
     `);
-  } catch (error) {
+  } catch (error: any) {
     // Error handling for payment failure
     res.send(`
       <!DOCTYPE html>

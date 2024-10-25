@@ -1,6 +1,5 @@
 import { model, Schema } from 'mongoose';
 import { TPaymentDetails } from './payment.interface';
-import { number } from 'zod';
 
 const PaymentDetailsSchema = new Schema<TPaymentDetails>(
   {
@@ -10,6 +9,10 @@ const PaymentDetailsSchema = new Schema<TPaymentDetails>(
     },
     email: {
       type: String,
+      required: true,
+    },
+    amount: {
+      type: Number,
       required: true,
     },
     payment_processor: {
@@ -28,10 +31,7 @@ const PaymentDetailsSchema = new Schema<TPaymentDetails>(
       type: String,
       required: true,
     },
-    amount: {
-      type: number,
-      required: true,
-    },
+
     payment_type: {
       type: String,
       required: true,

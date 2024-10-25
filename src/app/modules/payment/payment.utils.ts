@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 import { v4 as uuidv4 } from 'uuid';
 import config from '../../config';
@@ -64,7 +66,6 @@ export const initiatePayment = async (data: {
     const result = await response.json();
     return result;
   } catch (err: any) {
-    console.log(err.message);
     throw new Error('Payment initiation failed!');
   }
 };
