@@ -11,6 +11,10 @@ import { PostSearchableFields } from './postCreating.constant';
 import { TPost } from './postCreating.interface';
 import Post from './postCreating.model';
 import uploadImagesToCloudinary from '../../utils/imageGeneratorFunction';
+import {
+  addDocumentToIndex,
+  deleteDocumentFromIndex,
+} from '../../utils/meilisearch';
 
 const createPostIntoDB = async (payload: TPost, images: TImageFiles) => {
   const { postImages } = images;
@@ -20,6 +24,7 @@ const createPostIntoDB = async (payload: TPost, images: TImageFiles) => {
   payload.images = imageLink;
 
   const result = await Post.create(payload);
+  await addDocumentToIndex(result, 'posts');
 
   return result;
 };
@@ -91,6 +96,8 @@ const updatePostInDB = async (PostId: string, payload: TPost) => {
 
 const deletePostFromDB = async (itemId: string) => {
   const result = await Post.findByIdAndDelete(itemId);
+
+  await deleteDocumentFromIndex('posts', itemId);
   // const deletedItemId = result?._id;
   // if (deletedItemId) {
   //   await deleteDocumentFromIndex('items', deletedItemId.toString());

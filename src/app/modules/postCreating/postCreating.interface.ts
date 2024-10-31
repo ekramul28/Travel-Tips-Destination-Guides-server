@@ -11,6 +11,7 @@ export type TPost = {
   location: string;
   status?: keyof typeof POST_STATUS;
   authorId: ObjectId;
+  premium: string;
   category: keyof typeof POST_CATEGORY;
   vote?: mongoose.Types.ObjectId[];
   comment?: mongoose.Types.ObjectId[];

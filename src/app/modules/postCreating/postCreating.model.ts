@@ -22,6 +22,10 @@ const PostSchema: Schema = new Schema<TPost>(
       type: String,
       required: true,
     },
+    premium: {
+      type: String,
+      required: true,
+    },
     location: {
       type: String,
       required: true,

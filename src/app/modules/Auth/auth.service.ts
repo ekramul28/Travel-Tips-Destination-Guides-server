@@ -30,6 +30,7 @@ const registerUser = async (payload: TRegisterUser) => {
     mobileNumber: newUser.mobileNumber,
     profilePhoto: newUser?.profilePhoto,
     role: newUser.role,
+    verified: newUser.verified,
     status: newUser.status,
   };
 
@@ -80,6 +81,7 @@ const loginUser = async (payload: TLoginUser) => {
     mobileNumber: user.mobileNumber,
     profilePhoto: user?.profilePhoto,
     role: user.role,
+    verified: user.verified,
     status: user.status,
   };
 
