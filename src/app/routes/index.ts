@@ -7,6 +7,7 @@ import { CommentRoutes } from '../modules/commentSystem/comment.route';
 import { ItemCategoryRoutes } from '../modules/ItemCategory/itemCategory.route';
 import { VoteRoutes } from '../modules/Vote/vote.route';
 import { PaymentRoutes } from '../modules/payment/payment.route';
+import { MeilisearchRoutes } from '../modules/Meilisearch/meilisearch.routes';
 
 const router = express.Router();
 
@@ -26,6 +27,10 @@ const moduleRoutes = [
   {
     path: '/payment',
     route: PaymentRoutes,
+  },
+  {
+    path: '/search-items',
+    route: MeilisearchRoutes,
   },
   {
     path: '/vote',

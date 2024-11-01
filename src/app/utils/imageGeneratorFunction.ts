@@ -2,17 +2,17 @@
 import { TImageFile } from '../interfaces/image.interface';
 import { sendImageToCloudinary } from './sendImageToCloudinary';
 async function uploadImagesToCloudinary(
-  images: TImageFile[],
+  postImages: TImageFile[],
 ): Promise<string[]> {
-  const uploadPromises = images.map(async (image) => {
+  const uploadPromises = postImages.map(async (image) => {
     const { secure_url }: any = await sendImageToCloudinary(
-      image.fieldname,
+      image.originalname,
       image.path,
     );
     return secure_url;
   });
-
   const secureUrls = await Promise.all(uploadPromises);
+
   return secureUrls;
 }
 

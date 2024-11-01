@@ -18,7 +18,6 @@ import {
 
 const createPostIntoDB = async (payload: TPost, images: TImageFiles) => {
   const { postImages } = images;
-
   const imageLink = await uploadImagesToCloudinary(postImages);
 
   payload.images = imageLink;

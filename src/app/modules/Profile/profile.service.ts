@@ -5,7 +5,6 @@ import httpStatus from 'http-status';
 import { USER_STATUS } from '../User/user.constant';
 import { TImageFile } from '../../interfaces/image.interface';
 import { TUserProfileUpdate } from './profile.interface';
-import getImageLinkInCloudinary from '../../utils/getImageLinkInCloudinary';
 import uploadImagesToCloudinary from '../../utils/imageGeneratorFunction';
 
 const getMyProfile = async (user: JwtPayload) => {
