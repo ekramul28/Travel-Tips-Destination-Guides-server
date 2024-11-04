@@ -3,7 +3,7 @@ import { User } from '../User/user.model';
 import AppError from '../../errors/AppError';
 import httpStatus from 'http-status';
 import { USER_STATUS } from '../User/user.constant';
-import { TImageFile } from '../../interfaces/image.interface';
+import { TImageFiles } from '../../interfaces/image.interface';
 import { TUserProfileUpdate } from './profile.interface';
 import uploadImagesToCloudinary from '../../utils/imageGeneratorFunction';
 
@@ -23,7 +23,7 @@ const getMyProfile = async (user: JwtPayload) => {
 const updateMyProfile = async (
   user: JwtPayload,
   payload: Partial<TUserProfileUpdate>,
-  profilePhoto: TImageFile[],
+  profilePhoto: TImageFiles,
 ) => {
   const filter = {
     email: user.email,
@@ -35,6 +35,7 @@ const updateMyProfile = async (
   if (!profile) {
     throw new AppError(httpStatus.NOT_FOUND, 'User profile does not exixts!');
   }
+
   const res = await uploadImagesToCloudinary(profilePhoto.profilePhoto);
   // await getImageLinkInCloudinary(profilePhoto, payload);
   payload.profilePhoto = res[0];

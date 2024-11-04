@@ -21,8 +21,7 @@ const addComment = async (payload: TComment) => {
 
     const result = await Comment.create(payload);
     const populatedResult = await result.populate('userId');
-    console.log('hmm', populatedResult);
-    console.log('hmm2', result);
+
     // Add the new vote's _id to the post's vote array
     if (post.comment) {
       post.comment.push(result._id);

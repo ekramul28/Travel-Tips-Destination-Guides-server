@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from 'http-status';
 import { catchAsync } from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
@@ -6,7 +7,7 @@ import { voteServices } from './vote.service';
 const createVote = catchAsync(async (req, res) => {
   const result = await voteServices.addVote(req.body);
 
-  let message: string;
+  let message: string | undefined;
   if ('message' in result) {
     message = result.message;
   } else {
@@ -21,7 +22,7 @@ const createVote = catchAsync(async (req, res) => {
 });
 const getVote = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const result = await voteServices.getVote(id);
+  const result = await voteServices.getVote(id as any);
 
   sendResponse(res, {
     success: true,

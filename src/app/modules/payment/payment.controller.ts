@@ -67,7 +67,7 @@ const afterPaymentPage = catchAsync(async (req, res) => {
             <p><strong>Merchant Transaction ID:</strong> ${mer_txnid}</p>
             <p><strong>Payment Type:</strong> ${payment_type}</p>
             <br>
-            <a href="http://localhost:3000/" class="button">Go to Homepage</a>
+            <a href="https://travel-tips-destination-guides-client.vercel.app/" class="button">Go to Homepage</a>
           </div>
         </body>
       </html>
@@ -95,7 +95,7 @@ const afterPaymentPage = catchAsync(async (req, res) => {
             <p>We encountered an error processing your payment.</p>
             <p>Please try again or contact support if the issue persists.</p>
             <br>
-            <a href="http://localhost:3000/" class="button">Go to Homepage</a>
+            <a href="https://travel-tips-destination-guides-client.vercel.app/" class="button">Go to Homepage</a>
           </div>
         </body>
       </html>
@@ -125,7 +125,7 @@ const paymentFail = catchAsync(async (req, res) => {
           <p>We encountered an error processing your payment.</p>
           <p>Please try again or contact support if the issue persists.</p>
           <br>
-          <a href="http://localhost:3000/" class="button">Go to Homepage</a>
+          <a href="https://travel-tips-destination-guides-client.vercel.app/" class="button">Go to Homepage</a>
         </div>
       </body>
     </html>

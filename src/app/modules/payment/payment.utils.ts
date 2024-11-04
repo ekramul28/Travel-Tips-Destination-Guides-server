@@ -10,7 +10,6 @@ export const initiatePayment = async (data: {
   user: TUser;
 }) => {
   const { totalPrice, user } = data;
-  console.log(totalPrice);
   try {
     const tranId = `tran_${uuidv4()}`;
     const amount = totalPrice?.toFixed(2);
@@ -24,8 +23,9 @@ export const initiatePayment = async (data: {
       store_id: config.amr_pay_id,
       signature_key: config.amr_pay_key,
       tran_id: tranId,
-      success_url: `http://localhost:5000/api/v1/payment/conformation?userId=${user._id}&tnxId=${tranId}`,
-      fail_url: 'http://localhost:5000/api/v1/payment/fail',
+      success_url: `https://travel-tips-destination-guides-server.vercel.app/api/v1/payment/conformation?userId=${user._id}&tnxId=${tranId}`,
+      fail_url:
+        'https://travel-tips-destination-guides-server.vercel.app/api/v1/payment/fail',
       cancel_url: config.cancel_url,
       amount: amount,
       currency: 'BDT',
@@ -88,11 +88,8 @@ export const VerifyPayment = async (tnxId: string) => {
       },
     });
 
-    console.log('Response status:', response.status);
-
     // Log the raw response text for debugging
     const responseText = await response.text();
-    console.log('Raw response text:', responseText);
 
     // Try parsing if the response is in JSON format
     const result = JSON.parse(responseText);

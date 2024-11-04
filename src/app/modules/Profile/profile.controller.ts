@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express';
 import { catchAsync } from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import httpStatus from 'http-status';
 import { ProfileServices } from './profile.service';
-import { TImageFile } from '../../interfaces/image.interface';
 import AppError from '../../errors/AppError';
 
 const getMyProfile = catchAsync(async (req: Request, res: Response) => {
@@ -25,7 +25,7 @@ const updateMyProfile = catchAsync(async (req, res) => {
   const result = await ProfileServices.updateMyProfile(
     req.user,
     req.body,
-    req.files as TImageFile[],
+    req.files as any,
   );
 
   sendResponse(res, {
