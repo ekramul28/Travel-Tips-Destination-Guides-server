@@ -7,6 +7,7 @@ import { createToken } from '../../utils/verifyJWT';
 import { USER_ROLE } from '../User/user.constant';
 import { User } from '../User/user.model';
 import { TLoginUser, TRegisterUser } from './auth.interface';
+import { sendEmail } from '../../utils/sendEmail';
 
 const registerUser = async (payload: TRegisterUser) => {
   // checking if the user is exist
@@ -147,6 +148,92 @@ const changePassword = async (
   return null;
 };
 
+const forgetPassword = async (email: string) => {
+  // checking if the user is exist
+  const user = await User.isUserExistsByEmail(email);
+
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !');
+  }
+
+  // checking if the user is blocked
+
+  const userStatus = user?.status;
+
+  if (userStatus === 'BLOCKED') {
+    throw new AppError(httpStatus.FORBIDDEN, 'This user is blocked!');
+  }
+
+  const jwtPayload = {
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    mobileNumber: user.mobileNumber,
+    profilePhoto: user?.profilePhoto,
+    role: user.role,
+    verified: user.verified,
+    status: user.status,
+  };
+
+  const resetToken = createToken(
+    jwtPayload,
+    config.jwt_access_secret as string,
+    '10m',
+  );
+
+  const resetUILink = `${config.reset_pass_ui_link}?id=${user.email}&token=${resetToken} `;
+
+  sendEmail(user.email, resetUILink);
+
+  console.log(resetUILink);
+};
+
+const resetPassword = async (
+  payload: { email: string; newPassword: string },
+  token: string,
+) => {
+  // checking if the user is exist
+  const user = await User.isUserExistsByEmail(payload?.email);
+
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !');
+  }
+
+  const userStatus = user?.status;
+
+  if (userStatus === 'BLOCKED') {
+    throw new AppError(httpStatus.FORBIDDEN, 'This user is blocked!');
+  }
+  const decoded = jwt.verify(
+    token,
+    config.jwt_access_secret as string,
+  ) as JwtPayload;
+
+  //localhost:3000?id=A-0001&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJBLTAwMDEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDI4NTA2MTcsImV4cCI6MTcwMjg1MTIxN30.-T90nRaz8-KouKki1DkCSMAbsHyb9yDi0djZU3D6QO4
+
+  if (payload.email !== decoded.email) {
+    throw new AppError(httpStatus.FORBIDDEN, 'You are forbidden!');
+  }
+
+  //hash new password
+  const newHashedPassword = await bcrypt.hash(
+    payload.newPassword,
+    Number(config.bcrypt_salt_rounds),
+  );
+
+  await User.findOneAndUpdate(
+    {
+      email: decoded.email,
+      role: decoded.role,
+    },
+    {
+      password: newHashedPassword,
+      needsPasswordChange: false,
+      passwordChangedAt: new Date(),
+    },
+  );
+};
+
 const refreshToken = async (token: string) => {
   // checking if the given token is valid
   const decoded = jwt.verify(
@@ -200,6 +287,8 @@ const refreshToken = async (token: string) => {
 export const AuthServices = {
   registerUser,
   loginUser,
+  forgetPassword,
+  resetPassword,
   changePassword,
   refreshToken,
 };

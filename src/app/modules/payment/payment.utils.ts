@@ -23,9 +23,8 @@ export const initiatePayment = async (data: {
       store_id: config.amr_pay_id,
       signature_key: config.amr_pay_key,
       tran_id: tranId,
-      success_url: `https://travel-tips-destination-guides-server.vercel.app/api/v1/payment/conformation?userId=${user._id}&tnxId=${tranId}`,
-      fail_url:
-        'https://travel-tips-destination-guides-server.vercel.app/api/v1/payment/fail',
+      success_url: `${config.success_url}?userId=${user._id}&tnxId=${tranId}`,
+      fail_url: config.error_url,
       cancel_url: config.cancel_url,
       amount: amount,
       currency: 'BDT',

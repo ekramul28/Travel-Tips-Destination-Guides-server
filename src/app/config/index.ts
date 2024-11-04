@@ -32,4 +32,5 @@ export default {
   cancel_url: process.env.CANCELPAGE,
   error_url: process.env.ERRORPAGE,
   success_url: process.env.SUCCESSPAGE,
+  reset_pass_ui_link: process.env.RESET_PASS_UI_LINK,
 };

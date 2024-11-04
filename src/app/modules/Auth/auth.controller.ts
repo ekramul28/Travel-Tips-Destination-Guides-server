@@ -3,6 +3,7 @@ import config from '../../config';
 import sendResponse from '../../utils/sendResponse';
 import { AuthServices } from './auth.service';
 import { catchAsync } from '../../utils/catchAsync';
+import AppError from '../../errors/AppError';
 
 const registerUser = catchAsync(async (req, res) => {
   const result = await AuthServices.registerUser(req.body);
@@ -55,6 +56,32 @@ const changePassword = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const forgetPassword = catchAsync(async (req, res) => {
+  const userEmail = req.body.email;
+  const result = await AuthServices.forgetPassword(userEmail);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Reset link is generated successfully!',
+    data: result,
+  });
+});
+
+const resetPassword = catchAsync(async (req, res) => {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    throw new AppError(httpStatus.BAD_REQUEST, 'Something went wrong !');
+  }
+
+  const result = await AuthServices.resetPassword(req.body, token);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Password reset successfully!',
+    data: result,
+  });
+});
 
 const refreshToken = catchAsync(async (req, res) => {
   const { refreshToken } = req.cookies;
@@ -71,6 +98,8 @@ const refreshToken = catchAsync(async (req, res) => {
 export const AuthControllers = {
   registerUser,
   loginUser,
+  forgetPassword,
+  resetPassword,
   changePassword,
   refreshToken,
 };
