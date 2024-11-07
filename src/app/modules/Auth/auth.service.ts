@@ -181,17 +181,16 @@ const forgetPassword = async (email: string) => {
     '10m',
   );
 
-  const resetUILink = `${config.reset_pass_ui_link}?id=${user.email}&token=${resetToken} `;
+  const resetUILink = `${config.reset_pass_ui_link}?email=${user.email}&token=${resetToken} `;
 
   sendEmail(user.email, resetUILink);
-
-  console.log(resetUILink);
 };
 
-const resetPassword = async (
-  payload: { email: string; newPassword: string },
-  token: string,
-) => {
+const resetPassword = async (payload: {
+  email: string;
+  newPassword: string;
+  token: string;
+}) => {
   // checking if the user is exist
   const user = await User.isUserExistsByEmail(payload?.email);
 
@@ -205,10 +204,9 @@ const resetPassword = async (
     throw new AppError(httpStatus.FORBIDDEN, 'This user is blocked!');
   }
   const decoded = jwt.verify(
-    token,
+    payload.token,
     config.jwt_access_secret as string,
   ) as JwtPayload;
-
   //localhost:3000?id=A-0001&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJBLTAwMDEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDI4NTA2MTcsImV4cCI6MTcwMjg1MTIxN30.-T90nRaz8-KouKki1DkCSMAbsHyb9yDi0djZU3D6QO4
 
   if (payload.email !== decoded.email) {

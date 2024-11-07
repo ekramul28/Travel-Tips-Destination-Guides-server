@@ -10,6 +10,8 @@ import httpStatus from 'http-status';
 const ReadFile = promisify(fs.readFile);
 
 const sendEmail = async (email: string, html: string, subject: string) => {
+  console.log('user', config.sender_email, 'pass', config.sender_app_password);
+  console.log('okok');
   const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
@@ -24,7 +26,7 @@ const sendEmail = async (email: string, html: string, subject: string) => {
   });
 
   await transporter.sendMail({
-    from: '"FoundX" <fahimfiroz.ph@gmail.com>', // sender address
+    from: '"Travel" <mdekramulhassan168@gmial.com>', // sender address
     to: email, // list of receivers
     subject, // Subject line.
     //text: "Hello world?", // plain text body
